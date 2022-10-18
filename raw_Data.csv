@@ -1,3 +1,4 @@
+name,heartbeat,bodytemp,bloodpressure,weight,length
 Stan,70,37.0,130,70,178
 Mike,110,38,150,80,185
 Josh,90,37.6,140,90,189

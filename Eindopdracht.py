@@ -11,12 +11,13 @@ from pickle import TRUE
 from time import sleep
 import csv
 from tkinter import N, W
+from unicodedata import name
 
 
 #functions
 
 def manual_data():
-#The user choose if he wants to import from a CSV file or to manually input data. In this function there will be multiple inputs for the data and then we call the is_between function
+#The user choose if he wants to import from a CSV file or to manually input data. In this function there will be multiple inputs for the data and then we call the health_calculator function
     heart_Beat = int(input('Wat is je hartslag?\n')) 
     body_temp = float(input('Wat is je lichaamstemperatuur?\n'))
     blood_pressure = int(input('Wat is je bloed druk?\n'))
@@ -25,29 +26,28 @@ def manual_data():
     lengte_m = float(length_cm/100)
     bmi_value = weight_value / math.pow(lengte_m,2)
 
-    is_between(name=name_user, value_heart=heart_Beat, value_temp=body_temp, value_blood=blood_pressure, value_bmi=bmi_value)
+    health_calculator(name=name_user, value_heart=heart_Beat, value_temp=body_temp, value_blood=blood_pressure, value_bmi=bmi_value)
     
 
 
 
 def automatic_data():
-#The user choose if he wants to import from a CSV file or to manually input data. in this function we import the CSV file, the data we store in a list. and then we use a for loop so that all items will be send to the is_between function.
-    f = open ('raw_Data.csv', 'r')
-    csv_data = list(csv.reader(f))
+#The user choose if he wants to import from a CSV file or to manually input data. in this function we import the CSV file, the data we store in a list. and then we use a for loop so that all items will be send to the health_calculator function.
+    with open('raw_Data.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for item in reader:
+            name_user = str(item['name'])
+            heart_Beat = int(item['heartbeat'])
+            body_temp = float(item['bodytemp'])
+            blood_pressure = int(item['bloodpressure'])
+            weight_value = float(item['weight'])
+            length_cm = int(item['length'])
+            lengte_m = float(length_cm/100)
+            bmi_value = weight_value / math.pow(lengte_m,2)
 
-    for item in csv_data:
-        name_user = str(item[0])
-        heart_Beat = int(item[1])
-        body_temp = float(item[2])
-        blood_pressure = int(item[3])
-        weight_value = float(item[4])
-        length_cm = int(item[5])
-        lengte_m = float(length_cm/100)
-        bmi_value = weight_value / math.pow(lengte_m,2)
-
-        is_between(name=name_user, value_heart=heart_Beat, value_temp=body_temp, value_blood=blood_pressure, value_bmi=bmi_value)
+            health_calculator(name=name_user, value_heart=heart_Beat, value_temp=body_temp, value_blood=blood_pressure, value_bmi=bmi_value)
     
-def is_between(name, value_heart, value_temp, value_blood, value_bmi):
+def health_calculator(name, value_heart, value_temp, value_blood, value_bmi):
 #This function will determine if it is in between the health paramters. Ouput is Healty / Unhealty
     print(f'Hoi {name} Dit zijn jouw resultaten:')
     if value_heart >=55 and value_heart <= 90 and value_temp >=36.3 and value_temp <= 37.5 and value_blood >=100 and value_blood <= 140 and value_bmi >=18.5 and value_bmi <= 25:
